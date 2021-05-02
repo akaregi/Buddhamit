@@ -1,23 +1,29 @@
-import { Message, MessageEmbed, User } from "discord.js"
+import { Command, Message, MessageEmbed, User } from "discord.js"
 import { fetchUser } from "../lib/UserUtil"
 
-export function avatar (ctx: Message, args: string[]) {
-    if (args[0]) {
-        otherAvatar(ctx, args[0])
-        return
-    }
+const command: Command = {
+    name: 'avatar',
+    description: '',
+    execute: (ctx: Message, args: string[]) => {
+        if (args[0]) {
+            otherAvatar(ctx, args[0])
+            return
+        }
 
-    selfAvatar(ctx)
+        selfAvatar(ctx)
+    }
 }
 
+export = command
+
 function selfAvatar (ctx: Message) {
-    ctx.channel.send(`${ctx.author}よ、ブッダは貴方の真実の姿を見通しました……`)
-    ctx.channel.send(embed(ctx.author))
+    ctx.reply(`ブッダは貴方の真実の姿を見通しました……`)
+    ctx.reply(embed(ctx.author))
 }
 
 async function otherAvatar (ctx: Message, target: string) {
     if (!target.startsWith("<@!") || !target.endsWith(">")) {
-        ctx.channel.send(`${ctx.author}よ、対象の指定はメンションに依って行われたい。`)
+        ctx.reply('対象の指定はメンションに依って行われたい。')
         return
     }
 
@@ -25,12 +31,12 @@ async function otherAvatar (ctx: Message, target: string) {
     const member = await fetchUser(ctx, id)
 
     if (!member) {
-        ctx.channel.send(`${ctx.author}よ、そいつはボットか輪廻転生していない。`)
+        ctx.reply('そいつはボットか輪廻転生していない。')
         return
     }
 
-    ctx.channel.send(`${ctx.author}よ、ブッダは ${member.user.username} の真実の姿を見通しました……`)
-    ctx.channel.send(embed(member.user))
+    ctx.reply(`ブッダは ${member.user.username} の真実の姿を見通しました……`)
+    ctx.reply(embed(member.user))
 }
 
 function embed (author: User) {

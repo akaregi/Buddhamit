@@ -1,6 +1,12 @@
-import { Message } from "discord.js"
+import { Command, Message } from "discord.js"
 
-export function ping (ctx: Message) {
-    ctx.react('👍')
-    ctx.channel.send('仏説摩訶般若波羅蜜多心経……')
+const command: Command = {
+    name: 'ping',
+    description: '',
+    execute (ctx: Message, args: string[]) {
+        ctx.react('👍')
+        ctx.reply('仏説摩訶般若波羅蜜多心経……')
+    }
 }
+
+export = command

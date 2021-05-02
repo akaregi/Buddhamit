@@ -1,18 +1,15 @@
-import { Client as DiscordJS } from 'discord.js'
+/// <reference path="typings/discord.d.ts" />
 
-// system
-require('dotenv').config()
+import { Client, Collection, Message } from 'discord.js'
+import { readdirSync } from 'fs'
 
 // Logger
 import { getLogger } from 'log4js'
 const logger = getLogger()
 logger.level = "debug"
 
-// Command libraries
-import { ping } from './commands/Ping'
-import { stories } from './commands/Stories'
-import { avatar } from './commands/Avatar'
-import { members } from './commands/Members'
+// system
+require('dotenv').config()
 
 // Tokens
 const TOKEN = process.env['TOKEN'] || "aaa"
@@ -20,12 +17,20 @@ const PREFIX = process.env['PREFIX'] || "-"
 
 logger.info('Booting BUDDHAMIT Bot...')
 
-// Command cooldown
-const storiesCooldown = new Set();
+// Command registration
+const client = new Client()
+client.commands = new Collection()
+
+const files = readdirSync('./src/commands')
+    .filter(file => file.endsWith('.ts'))
+    .map(file => file.slice(0, -3))
+
+for (const file of files) {
+    const command = require(`./commands/${file}`)
+    client.commands.set(command.name, command)
+}
 
 // Logic
-const client = new DiscordJS()
-
 client.on('ready', () => {
     logger.info(`Logging in as ${client.user?.tag || 'unknown'}`)
     logger.info('Booted BUDDHAMIT Bot!')
@@ -39,46 +44,29 @@ client.on('ready', () => {
     })
 })
 
-client.on('message', async ctx => {
-    if (!ctx.content.startsWith(PREFIX)) {
+client.on('message', async (ctx: Message) => {
+    if (!ctx.content.startsWith(PREFIX) || ctx.author.bot) {
         return
     }
 
+    const args = ctx.content.slice(PREFIX.length).split(/ +/)
+    const command = args.shift()?.toLowerCase();
+
+    // It logs.
     logger.debug(`${ctx.author.username} ${ctx.content}`)
 
-    const args = ctx.content.slice(PREFIX.length).trim().split(/ +/g);
-    const command = args.shift()?.toLowerCase() as string
-
-    if (command.startsWith('avatar')) {
-        avatar(ctx, args)
+    // Checks if command exists. Exits when not exist.
+    if (!command || !client.commands.has(command)) {
+        ctx.reply('貴方は何を言っていますか？')
         return
     }
 
-    switch (command) {
-        case 'ping':
-            ping(ctx); return
-
-        case 'members':
-            members(ctx); return
-
-        case 'stories':
-            const id = ctx.author.id
-            if (storiesCooldown.has(id)) {
-                ctx.channel.send(`${ctx.author}よ、仏の顔も三度までという。`)
-                return
-            }
-
-            stories(ctx)
-            storiesCooldown.add(id)
-            setTimeout(() => { storiesCooldown.delete(id) }, 10000)
-
-            return
-
-        default:
-            break
+    try {
+        client.commands.get(command)!.execute(ctx, args)
+    } catch (error) {
+        logger.error(error)
+        ctx.reply('ブッダでもどうしようもないことが起こりました。')
     }
-
-    ctx.channel.send(`${ctx.author}、貴方は何を言っていますか？`)
 })
 
 client.login(TOKEN)

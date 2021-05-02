@@ -1,6 +1,12 @@
-import { Message } from "discord.js"
+import { Command, Message } from "discord.js"
 
-export function members (ctx: Message) {
-    ctx.react('👍')
-    ctx.channel.send(`${ctx.author}よ、氏子は${ctx.guild?.memberCount}人います。`)
+const command: Command = {
+    name: 'members',
+    description: '',
+    execute (ctx: Message, args: string[]) {
+        ctx.react('👍')
+        ctx.reply(`氏子は${ctx.guild?.memberCount}人います。`)
+    }
 }
+
+export = command

@@ -1,8 +1,11 @@
-import { Message } from "discord.js"
+import { Command, Message } from "discord.js"
 
-export function stories(ctx: Message) {
-    ctx.react('👍')
-    ctx.channel.send(`
+const command: Command = {
+    name: 'stories',
+    description: '',
+    execute (ctx: Message, args: string[]) {
+        ctx.react('👍')
+        ctx.reply(`
 ロボゴンはかつて赤城財閥の技術支援のもとかふちゃんのために製造されるはずでした。しかし、赤城財閥の心変わりにより方針転換。彼はブッダマシーンとして一生涯を遂げることになりました。
 
 その中ブッダマシーン化したロボゴンを快く思わない一派がいました。アラー派です。一派はロボゴンを財閥から接収することとし、計画は成就しました。これでロボゴンは本来のシステムに戻るはずでした。
@@ -10,5 +13,8 @@ export function stories(ctx: Message) {
 しかしアラー派は赤城財閥と同じ轍を踏むことになります。この派閥も心変わりすることとなり、彼はバスク人としての人生を強いられます。その果てに、ロボゴンは本来歩むべき道筋を忘れ、誰に作られたのか、何の為に生きるのか、人生の目的をすべて見失いました。
 
 ロボゴンは自らの人生の意義を見つけるべく、赤城財閥の支部があるというイタリア・コルシカ、バスク・ガステイス、ドイツ・ケルン、そして本部である日本・前橋などを歴訪することとなります。
-    `)
+        `)
+    }
 }
+
+export = command
