@@ -1,11 +1,11 @@
 import { Client as DiscordJS } from 'discord.js'
 
 // system
-import { getLogger } from 'log4js'
 require('dotenv').config()
 
+// Logger
+import { getLogger } from 'log4js'
 const logger = getLogger()
-
 logger.level = "debug"
 
 // Command libraries
@@ -14,13 +14,17 @@ import { stories } from './commands/Stories'
 import { avatar } from './commands/Avatar'
 import { members } from './commands/Members'
 
-// Discord Bot
-const client = new DiscordJS()
-
+// Tokens
 const TOKEN = process.env['TOKEN'] || "aaa"
 const PREFIX = process.env['PREFIX'] || "-"
 
 logger.info('Booting BUDDHAMIT Bot...')
+
+// Command cooldown
+const storiesCooldown = new Set();
+
+// Logic
+const client = new DiscordJS()
 
 client.on('ready', () => {
     logger.info(`Logging in as ${client.user?.tag || 'unknown'}`)
@@ -36,19 +40,17 @@ client.on('ready', () => {
 })
 
 client.on('message', async ctx => {
-    const message = ctx.content
-    const channel = ctx.channel
-
-    logger.debug(`${channel} ${message}`)
-
-    if (!message.startsWith(PREFIX)) {
+    if (!ctx.content.startsWith(PREFIX)) {
         return
     }
 
-    const command = message.slice(1)
+    logger.debug(`${ctx.author.username} ${ctx.content}`)
+
+    const args = ctx.content.slice(PREFIX.length).trim().split(/ +/g);
+    const command = args.shift()?.toLowerCase() as string
 
     if (command.startsWith('avatar')) {
-        avatar(ctx)
+        avatar(ctx, args)
         return
     }
 
@@ -60,7 +62,17 @@ client.on('message', async ctx => {
             members(ctx); return
 
         case 'stories':
-            stories(ctx); return
+            const id = ctx.author.id
+            if (storiesCooldown.has(id)) {
+                ctx.channel.send(`${ctx.author}よ、仏の顔も三度までという。`)
+                return
+            }
+
+            stories(ctx)
+            storiesCooldown.add(id)
+            setTimeout(() => { storiesCooldown.delete(id) }, 10000)
+
+            return
 
         default:
             break
