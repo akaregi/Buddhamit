@@ -1,10 +1,10 @@
 import { Client as DiscordJS } from 'discord.js'
-import { avatar } from './lib/Avatar'
-import { members } from './lib/Members'
 
 // Command libraries
 import { ping } from './lib/Ping'
 import { stories } from './lib/Stories'
+import { avatar } from './lib/Avatar'
+import { members } from './lib/Members'
 
 require('dotenv').config()
 
