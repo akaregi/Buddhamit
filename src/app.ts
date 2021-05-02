@@ -1,4 +1,4 @@
-/// <reference path="typings/discord.d.ts" />
+/// <reference path="@types/discord.d.ts" />
 
 import { Client, Collection, Message } from 'discord.js'
 import { readdirSync } from 'fs'
