@@ -1,12 +1,18 @@
 import { Client as DiscordJS } from 'discord.js'
 
-// Command libraries
-import { ping } from './lib/Ping'
-import { stories } from './lib/Stories'
-import { avatar } from './lib/Avatar'
-import { members } from './lib/Members'
-
+// system
+import { getLogger } from 'log4js'
 require('dotenv').config()
+
+const logger = getLogger()
+
+logger.level = "debug"
+
+// Command libraries
+import { ping } from './commands/Ping'
+import { stories } from './commands/Stories'
+import { avatar } from './commands/Avatar'
+import { members } from './commands/Members'
 
 // Discord Bot
 const client = new DiscordJS()
@@ -14,11 +20,11 @@ const client = new DiscordJS()
 const TOKEN = process.env['TOKEN'] || "aaa"
 const PREFIX = process.env['PREFIX'] || "-"
 
-console.log('Booting BUDDHAMIT Bot...')
-console.log(`Logging in as ${client.user?.tag || 'unknown'}`)
+logger.info('Booting BUDDHAMIT Bot...')
 
 client.on('ready', () => {
-    console.log('Booted BUDDHAMIT Bot!');
+    logger.info(`Logging in as ${client.user?.tag || 'unknown'}`)
+    logger.info('Booted BUDDHAMIT Bot!')
 
     client.user?.setPresence({
         activity: {
@@ -33,7 +39,7 @@ client.on('message', async ctx => {
     const message = ctx.content
     const channel = ctx.channel
 
-    console.log(`Recieved: ${message} at ${channel}`)
+    logger.debug(`${channel} ${message}`)
 
     if (!message.startsWith(PREFIX)) {
         return
@@ -41,23 +47,26 @@ client.on('message', async ctx => {
 
     const command = message.slice(1)
 
+    if (command.startsWith('avatar')) {
+        avatar(ctx)
+        return
+    }
+
     switch (command) {
         case 'ping':
-            ping(ctx); break
+            ping(ctx); return
 
         case 'members':
-            members(ctx); break
-
-        case 'avatar':
-            avatar(ctx); break
+            members(ctx); return
 
         case 'stories':
-            stories(ctx); break
+            stories(ctx); return
 
         default:
-            ctx.channel.send(`${ctx.author}、貴方は何を言っていますか？`)
-            break;
+            break
     }
+
+    ctx.channel.send(`${ctx.author}、貴方は何を言っていますか？`)
 })
 
 client.login(TOKEN)
