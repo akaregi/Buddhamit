@@ -1,0 +1,25 @@
+{
+  "name": "buddhamit",
+  "version": "1.0.0",
+  "description": "Buddhamit stands for Buddha-dammit",
+  "main": "index.js",
+  "author": "MIZUHO SHINOHARA",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "@types/node": "^15.0.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "bufferutil": "^4.0.3",
+    "discord.js": "^12.5.3",
+    "dotenv": "^8.2.0",
+    "utf-8-validate": "^5.0.4"
+  },
+  "scripts": {
+    "start": "node ./dist/app.js",
+    "debug": "ts-node ./src/app.ts",
+    "build": "tsc -p .",
+    "build:test": "tsc -p . --noEmit"
+  }
+}
