@@ -2,7 +2,7 @@ import { Command, Message } from "discord.js"
 
 const command: Command = {
     name: 'jugemu',
-    description: '',
+    description: '寿限無を唱えます。',
     execute(ctx: Message, args: string[]) {
         ctx.react('👍')
         ctx.reply(`

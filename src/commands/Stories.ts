@@ -2,7 +2,7 @@ import { Command, Message } from "discord.js"
 
 const command: Command = {
     name: 'stories',
-    description: '',
+    description: '「ロボゴン」の秘められたストーリーをあなたに伝授します。',
     execute (ctx: Message, args: string[]) {
         ctx.react('👍')
         ctx.reply(`

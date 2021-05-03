@@ -64,11 +64,11 @@ client.on('message', async (ctx: Message) => {
     if (command === 'help') {
         let text = '以下のコマンドが使えます：'
         for (const help of helps) {
-            text += `\n\`${PREFIX}${help.name}\` : ${help.description}`
+            text += `\n\`${PREFIX}${help.name}\`\n${help.description}\n`
         }
 
-        ctx.react('👍')
-        ctx.reply(text)
+        ctx.react('👍');
+        (await ctx.author.createDM()).send(text)
         return
     }
 
