@@ -1,8 +1,9 @@
 import { Command, Message } from "discord.js"
+import { createReadStream, existsSync } from "fs"
 
 const command: Command = {
     name: 'fakejoin',
-    description: '1～10秒間ボイスチャンネルに接続して説教します。',
+    description: '0～15秒間ボイスチャンネルに接続して説教します。',
 
     async execute(ctx: Message, args: string[]) {
         ctx.react('👍')
@@ -14,11 +15,19 @@ const command: Command = {
             return
         }
 
-        const seconds = Math.ceil(Math.random() * 9000) + 1000
+        if (!existsSync('music/sutra.opus')) {
+            ctx.reply('このブッダには般若心経が搭載されていない。')
+            return
+        }
 
-        ctx.reply(`${seconds / 1000}秒説教を行います……`)
+        const connection = await channel.join()
+        const dispatcher = connection.play(createReadStream('music/sutra.opus'), { type: "ogg/opus" })
+        const seconds = Math.ceil(Math.random() * 15000)
 
-        await channel.join()
+        dispatcher.on('start', () => ctx.reply(`${seconds / 1000}秒説教を行います……`))
+        dispatcher.on('finish', () => channel.leave())
+        dispatcher.on('error', console.error);
+
         setTimeout(() => {
             channel.leave()
         }, seconds )
