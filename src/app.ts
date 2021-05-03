@@ -1,6 +1,6 @@
 /// <reference path="@types/discord.d.ts" />
 
-import { Client, Collection, Message } from 'discord.js'
+import { Client, Collection, Command, Message } from 'discord.js'
 import { readdirSync } from 'fs'
 
 // Logger
@@ -19,6 +19,7 @@ logger.info('Booting BUDDHAMIT Bot...')
 
 // Command registration
 const client = new Client()
+const helps: Partial<Command>[] = []
 client.commands = new Collection()
 
 const files = readdirSync('./src/commands')
@@ -28,6 +29,10 @@ const files = readdirSync('./src/commands')
 for (const file of files) {
     const command = require(`./commands/${file}`)
     client.commands.set(command.name, command)
+    helps.push({
+        name: command.name,
+        description: command.description
+    })
 }
 
 // Logic
@@ -55,14 +60,23 @@ client.on('message', async (ctx: Message) => {
     // It logs.
     logger.debug(`${ctx.author.username} ${ctx.content}`)
 
+    // Help command
+    if (command === 'help') {
+        let text = '以下のコマンドが使えます：'
+        for (const help of helps) {
+            text += `\n\`${PREFIX}${help.name}\` : ${help.description}`
+        }
+
+        ctx.react('👍')
+        ctx.reply(text)
+        return
+    }
+
     // Checks if command exists. Exits when not exist.
+    // Excludes -help.
     if (!command || !client.commands.has(command)) {
         ctx.react('❌')
-        ctx.reply(`
-貴方は何を言っていますか？
-次のコマンドを読経できます: \`-ping\`, \`-members\`, \`-stories\`, \`-avatar [mention]\`
-        `)
-
+        ctx.reply(`貴方は何を言っていますか？`)
         return
     }
 
