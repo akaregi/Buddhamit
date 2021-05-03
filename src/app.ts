@@ -57,7 +57,12 @@ client.on('message', async (ctx: Message) => {
 
     // Checks if command exists. Exits when not exist.
     if (!command || !client.commands.has(command)) {
-        ctx.reply('貴方は何を言っていますか？')
+        ctx.react('❌')
+        ctx.reply(`
+貴方は何を言っていますか？
+次のコマンドを読経できます: \`-ping\`, \`-members\`, \`-stories\`, \`-avatar [mention]\`
+        `)
+
         return
     }
 
@@ -65,6 +70,7 @@ client.on('message', async (ctx: Message) => {
         client.commands.get(command)!.execute(ctx, args)
     } catch (error) {
         logger.error(error)
+        ctx.react('❌')
         ctx.reply('ブッダでもどうしようもないことが起こりました。')
     }
 })
