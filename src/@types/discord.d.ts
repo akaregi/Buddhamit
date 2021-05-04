@@ -1,6 +1,9 @@
+import { Logger } from "log4js"
+
 declare module 'discord.js' {
     export interface Client {
-        commands: Collection<unknown, Command>
+        commands: Collection<unknown, Command>,
+        logger: Logger
     }
 
     export interface Command {

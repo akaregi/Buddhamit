@@ -28,6 +28,7 @@ const client = new Client({
     }
 })
 client.commands = new Collection()
+client.logger = logger
 
 const files = readdirSync('./src/commands')
     .filter(file => file.endsWith('.ts'))
