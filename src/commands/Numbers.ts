@@ -1,12 +1,13 @@
-import { Collection } from "discord.js"
-import { Command, Message } from "discord.js"
-import { convertId } from "../lib/Util"
+import { Collection } from 'discord.js'
+import { Command, Message } from 'discord.js'
+import { convertId } from '../lib/Util'
 
 const command: Command = {
     name: 'numbers',
     description: '1～10までの数字を当てよう！ numbers stats で戦績がわかる。',
     usage: 'numbers [stats]',
     aliases: ['number', 'num'],
+
 
     execute(ctx: Message, args: string[]) {
         if (args[0] && args[0] === 'stats') {
@@ -23,10 +24,10 @@ const command: Command = {
         ctx.react('👍')
         ctx.channel.send(`ブッダの求める数値を提示せよ……${seconds}秒内に！`)
         ctx.channel.awaitMessages(filter, { max: 1, time: seconds * 1000, errors: ['time'] })
-            .then(async answers => {
+            .then(answers => {
                 win(ctx, answer, seconds, startTime, answers)
             })
-            .catch(async _ => {
+            .catch(() => {
                 lose(ctx, answer)
             })
     }
@@ -51,7 +52,7 @@ async function win (ctx: Message, answer: number, seconds: number, startTime: Da
     ctx.channel.send(
         `:tada: :tada: ${answers.first()?.author} は天才です :tada: :tada:\n` +
         `答えは「**${answer}**」、残り時間は「**${seconds - (spentTime / 1000)}秒**」であった。` +
-        `皆の衆、よく見習うべし。`
+        '皆の衆、よく見習うべし。'
     )
 }
 

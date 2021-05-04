@@ -1,11 +1,13 @@
-import { Command, Message } from "discord.js"
-import { createReadStream, existsSync } from "fs"
+import { Command, Message } from 'discord.js'
+import { createReadStream, existsSync } from 'fs'
 
 const command: Command = {
     name: 'allahu',
     description: 'ｱｯﾗｰｱｸﾊﾞｰ！',
     aliases: ['ヤクザアラー'],
 
+    // NOTE: args must be implemented by discord.d.ts
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async execute(ctx: Message, args: string[]) {
         ctx.react('👍')
 
@@ -22,12 +24,14 @@ const command: Command = {
         }
 
         const musics = ['music/allahu1.opus', 'music/allahu2.opus']
-        const music = musics[Math.floor(Math.random() * musics.length)]!! // must be string
+        // NOTE: must be string
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const music = musics[Math.floor(Math.random() * musics.length)]!
 
         const connection = await channel.join()
-        const dispatcher = connection.play(createReadStream(music), { type: "ogg/opus" })
+        const dispatcher = connection.play(createReadStream(music), { type: 'ogg/opus' })
 
-        dispatcher.on('start', () => ctx.reply(`**ALLAHU AKBAR**`))
+        dispatcher.on('start', () => ctx.reply('**ALLAHU AKBAR**'))
         dispatcher.on('finish', () => channel.leave())
         dispatcher.on('error', console.error)
     }

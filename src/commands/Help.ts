@@ -1,10 +1,12 @@
-import { Command, Message } from "discord.js"
+import { Command, Message } from 'discord.js'
 
 const command: Command = {
     name: 'help',
     description: '助け舟を出します。',
     aliases: ['助けてブッダ', '南無三', '南無阿弥陀仏', 'くわばらくわばら'],
 
+    // NOTE: args must be implemented by discord.d.ts
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async execute(ctx: Message, args: string[]) {
         let text = '以下のコマンドが使えます：'
         for (const cmd of ctx.client.commands) {

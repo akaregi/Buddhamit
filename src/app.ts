@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="@types/discord.d.ts" />
 
 // system
@@ -11,7 +12,7 @@ prisma.$connect()
 // Logger
 import { getLogger } from 'log4js'
 const logger = getLogger()
-logger.level = "debug"
+logger.level = 'debug'
 
 // Events
 import { preventMessageDelete } from './events/MessageDelete'
@@ -19,9 +20,11 @@ import { dispatchCommand } from './events/CommandDispatch'
 import { ready } from './events/Ready'
 
 // Tokens
-require('dotenv').config()
-const TOKEN = process.env['TOKEN'] || "aaa"
-const PREFIX = process.env['PREFIX'] || "-"
+import dotenv from 'dotenv'
+dotenv.config()
+
+const TOKEN = process.env['TOKEN'] || 'aaa'
+const PREFIX = process.env['PREFIX'] || '-'
 
 logger.info('Booting BUDDHAMIT Bot...')
 
@@ -46,6 +49,7 @@ const files = readdirSync('./src/commands')
     .map(file => file.slice(0, -3))
 
 for (const file of files) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const command = require(`./commands/${file}`)
     client.commands.set(command.name, command)
 }

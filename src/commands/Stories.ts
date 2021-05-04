@@ -1,10 +1,12 @@
-import { Command, Message } from "discord.js"
+import { Command, Message } from 'discord.js'
 
 const command: Command = {
     name: 'stories',
     description: '「ロボゴン」の秘められたストーリーをあなたに伝授します。',
     aliases: ['story', 'robogon', 'robo_gon'],
 
+    // NOTE: args must be implemented by discord.d.ts
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async execute (ctx: Message, args: string[]) {
         ctx.reply('DM に送信します……')
         ctx.react('👍');

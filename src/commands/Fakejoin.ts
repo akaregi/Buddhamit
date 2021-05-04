@@ -1,11 +1,13 @@
-import { Command, Message } from "discord.js"
-import { createReadStream, existsSync } from "fs"
+import { Command, Message } from 'discord.js'
+import { createReadStream, existsSync } from 'fs'
 
 const command: Command = {
     name: 'fakejoin',
     description: '0～15秒間ボイスチャンネルに接続して説教します。',
     aliases: ['fakebuddha', 'fake', 'ヤクザブッダ', '説教', 'フェイクブッダ'],
 
+    // NOTE: args must be implemented by discord.d.ts
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async execute(ctx: Message, args: string[]) {
         ctx.react('👍')
 
@@ -22,12 +24,12 @@ const command: Command = {
         }
 
         const connection = await channel.join()
-        const dispatcher = connection.play(createReadStream('music/sutra.opus'), { type: "ogg/opus" })
+        const dispatcher = connection.play(createReadStream('music/sutra.opus'), { type: 'ogg/opus' })
         const seconds = Math.ceil(Math.random() * 15000)
 
         dispatcher.on('start', () => ctx.reply(`${seconds / 1000}秒説教を行います……`))
         dispatcher.on('finish', () => channel.leave())
-        dispatcher.on('error', console.error);
+        dispatcher.on('error', console.error)
 
         setTimeout(() => {
             channel.leave()

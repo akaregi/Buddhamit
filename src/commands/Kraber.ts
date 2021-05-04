@@ -1,10 +1,12 @@
-import { Command, Message, MessageEmbed } from "discord.js"
+import { Command, Message, MessageEmbed } from 'discord.js'
 
 const command: Command = {
     name: 'kraber',
     description: 'あなたはクレーバーです！',
     aliases: ['クレーバー'],
 
+    // NOTE: args must be implemented by discord.d.ts
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     execute(ctx: Message, args: string[]) {
         ctx.react('👍')
 

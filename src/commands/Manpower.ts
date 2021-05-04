@@ -1,5 +1,5 @@
-import { Command, Message } from "discord.js"
-import { die, fetchUserAll } from "../lib/Util"
+import { Command, Message } from 'discord.js'
+import { die, fetchUserAll } from '../lib/Util'
 
 const command: Command = {
     name: 'manpower',
@@ -24,8 +24,8 @@ const command: Command = {
         const role = args[0]?.slice(3).slice(0, -1)
 
         const members = (await fetchUserAll(ctx))
-        ?.array()
-        .filter(member => member.roles.cache.has(role))
+            ?.array()
+            .filter(member => member.roles.cache.has(role))
 
         if (!members) {
             return die(ctx, 'そのロールに属する舎利子は存在しない。')

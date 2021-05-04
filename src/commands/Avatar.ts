@@ -1,5 +1,5 @@
-import { Command, Message, MessageEmbed, User } from "discord.js"
-import { die, fetchUser } from "../lib/Util"
+import { Command, Message, MessageEmbed, User } from 'discord.js'
+import { die, fetchUser } from '../lib/Util'
 
 const command: Command = {
     name: 'avatar',
@@ -18,12 +18,12 @@ const command: Command = {
 export = command
 
 function selfAvatar (ctx: Message) {
-    ctx.reply(`ブッダは貴方の真実の姿を見通しました……`)
+    ctx.reply('ブッダは貴方の真実の姿を見通しました……')
     ctx.reply(embed(ctx.author))
 }
 
 async function otherAvatar (ctx: Message, target: string) {
-    if (!target.startsWith("<@!") || !target.endsWith(">")) {
+    if (!target.startsWith('<@!') || !target.endsWith('>')) {
         return die(ctx, '対象の指定はメンションに依って行われたい。')
     }
 
