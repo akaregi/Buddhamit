@@ -4,6 +4,7 @@ import { die, fetchUserAll } from "../lib/Util"
 const command: Command = {
     name: 'manpower',
     description: '人的をサーバー内から抽選します。',
+    usage: 'manpower <role>',
     aliases: ['徴兵', '人的', 'mp'],
 
     async execute(ctx: Message, args: string[]) {
