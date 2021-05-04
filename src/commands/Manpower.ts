@@ -7,21 +7,20 @@ const command: Command = {
     aliases: ['徴兵', '人的', 'mp'],
 
     async execute(ctx: Message, args: string[]) {
-
         if (ctx.channel.type === 'dm') {
             ctx.channel.send('あなたしかいませんよ、舎利子。')
             return
         }
 
-        const role = args[0]?.slice(3).slice(0, -1)
-
-        if (!role) {
+        if (!args[0]) {
             return die(ctx, 'ロールを指定してください、舎利子よ。')
         }
 
-        if (!role.startsWith('<@&') || !role.endsWith('>')) {
+        if (!args[0].startsWith('<@&') || !args[0].endsWith('>')) {
             return die(ctx, 'ロール指定がアラーです、舎利子。')
         }
+
+        const role = args[0]?.slice(3).slice(0, -1)
 
         const members = (await fetchUserAll(ctx))
         ?.array()
