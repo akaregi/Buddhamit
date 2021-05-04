@@ -1,6 +1,6 @@
 /// <reference path="@types/discord.d.ts" />
 
-import { Client, Collection, Command, Message } from 'discord.js'
+import { Client, Collection, Message } from 'discord.js'
 import { readdirSync } from 'fs'
 
 // Logger
@@ -93,6 +93,28 @@ client.on('message', async (ctx: Message) => {
         logger.error(error)
         return die(ctx, 'ブッダでもどうしようもないことが起こりました。')
     }
+})
+
+client.on('messageDelete', ctx => {
+    const permission = process.env['MESSAGE_PROHIBIT']
+
+    if (!permission) {
+        return
+    }
+
+    if (!ctx.member?.roles.cache.has(permission)) {
+        return
+    }
+
+    const author = ctx.author?.tag
+    const content = ctx.content
+
+    if (ctx.author?.bot) {
+        ctx.channel.send(`${content}`)
+        return
+    }
+
+    ctx.channel.send(`${author} ${content}`)
 })
 
 client.login(TOKEN)
