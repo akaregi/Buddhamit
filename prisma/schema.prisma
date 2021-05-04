@@ -1,0 +1,14 @@
+datasource db {
+    provider = "sqlite"
+    url = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model NumbersStats {
+    id   Int @id
+    win  Int @default(0)
+    lose Int @default(0)
+}

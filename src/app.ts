@@ -1,6 +1,7 @@
 /// <reference path="@types/discord.d.ts" />
 
 import { Client, Collection, Intents, Message } from 'discord.js'
+import { PrismaClient } from '@prisma/client'
 import { readdirSync } from 'fs'
 import { die } from './lib/Util'
 
@@ -8,6 +9,10 @@ import { die } from './lib/Util'
 import { getLogger } from 'log4js'
 const logger = getLogger()
 logger.level = "debug"
+
+// Database
+const prisma = new PrismaClient()
+prisma.$connect()
 
 // system
 require('dotenv').config()
@@ -29,6 +34,7 @@ const client = new Client({
 })
 client.commands = new Collection()
 client.logger = logger
+client.prisma = prisma
 
 const files = readdirSync('./src/commands')
     .filter(file => file.endsWith('.ts'))
@@ -51,6 +57,10 @@ client.on('ready', () => {
         },
         status: 'online'
     })
+})
+
+client.on('error', async () => {
+    await prisma.$disconnect()
 })
 
 client.on('message', async (ctx: Message) => {
