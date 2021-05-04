@@ -33,6 +33,7 @@ const client = new Client({
     }
 })
 client.commands = new Collection()
+client.prefix = PREFIX
 client.logger = logger
 client.prisma = prisma
 
@@ -77,23 +78,7 @@ client.on('message', async (ctx: Message) => {
 
     // Help command
     if (command === 'help') {
-        let text = '以下のコマンドが使えます：'
-        for (const cmd of client.commands) {
-            const command = cmd[1]
-            const alises = command.aliases
-                ?.map(cmd => `\`${cmd}\``)
-                .join(', ') ?? 'エイリアスなし'
 
-            text += '\n' +
-                    `\`${PREFIX}${command.usage ?? command.name}\`` +
-                    ` (${alises})\n` +
-                    `${command.description}\n`
-        }
-
-        ctx.reply('DM に送信します……')
-        ctx.react('👍');
-        (await ctx.author.createDM()).send(text)
-        return
     }
 
     try {
