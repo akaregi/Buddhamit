@@ -61,7 +61,14 @@ client.on('message', async (ctx: Message) => {
         let text = '以下のコマンドが使えます：'
         for (const cmd of client.commands) {
             const command = cmd[1]
-            text += `\n\`${PREFIX}${command.usage ?? command.name}\`\n${command.description}\n`
+            const alises = command.aliases
+                ?.map(cmd => `\`${cmd}\``)
+                .join(', ') ?? 'エイリアスなし'
+
+            text += '\n' +
+                    `\`${PREFIX}${command.usage ?? command.name}\`` +
+                    ` (${alises})\n` +
+                    `${command.description}\n`
         }
 
         ctx.react('👍');
