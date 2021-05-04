@@ -9,7 +9,7 @@ export function fetchUser(ctx: Message, id: string) {
 }
 
 export function convertId (id: string) {
-    return parseInt(id.slice(-3).slice(0, -1))!!
+    return parseInt(id.slice(3).slice(0, -1))!!
 }
 
 export function die(ctx: Message, message: string) {

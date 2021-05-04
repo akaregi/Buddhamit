@@ -1,29 +1,32 @@
 /// <reference path="@types/discord.d.ts" />
 
-import { Client, Collection, Intents, Message } from 'discord.js'
-import { PrismaClient } from '@prisma/client'
+// system
 import { readdirSync } from 'fs'
-import { die } from './lib/Util'
+
+// Database
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+prisma.$connect()
 
 // Logger
 import { getLogger } from 'log4js'
 const logger = getLogger()
 logger.level = "debug"
 
-// Database
-const prisma = new PrismaClient()
-prisma.$connect()
-
-// system
-require('dotenv').config()
+// Events
+import { preventMessageDelete } from './events/MessageDelete'
+import { dispatchCommand } from './events/CommandDispatch'
+import { ready } from './events/Ready'
 
 // Tokens
+require('dotenv').config()
 const TOKEN = process.env['TOKEN'] || "aaa"
 const PREFIX = process.env['PREFIX'] || "-"
 
 logger.info('Booting BUDDHAMIT Bot...')
 
-// Command registration
+// Client initialization
+import { Client, Collection, Intents, Message } from 'discord.js'
 const client = new Client({
     ws: {
         intents: new Intents([
@@ -37,6 +40,7 @@ client.prefix = PREFIX
 client.logger = logger
 client.prisma = prisma
 
+// Command registration
 const files = readdirSync('./src/commands')
     .filter(file => file.endsWith('.ts'))
     .map(file => file.slice(0, -3))
@@ -48,16 +52,7 @@ for (const file of files) {
 
 // Logic
 client.on('ready', () => {
-    logger.info(`Logging in as ${client.user?.tag ?? 'unknown'}`)
-    logger.info('Booted BUDDHAMIT Bot!')
-
-    client.user?.setPresence({
-        activity: {
-            name: "阿弥陀経",
-            url: 'https://ja.wikisource.org/wiki/仏説阿弥陀経'
-        },
-        status: 'online'
-    })
+    ready(client)
 })
 
 client.on('error', async () => {
@@ -65,60 +60,11 @@ client.on('error', async () => {
 })
 
 client.on('message', async (ctx: Message) => {
-    // Neither illegal prefix nor sent by bot
-    if (!ctx.content.startsWith(PREFIX) || ctx.author.bot) {
-        return
-    }
-
-    const args = ctx.content.slice(PREFIX.length).split(/ +/)
-    const command = args.shift()!!.toLowerCase(); // NOTE: Must be string
-
-    // It logs.
-    logger.debug(`${ctx.author.username} ${ctx.content}`)
-
-    // Help command
-    if (command === 'help') {
-
-    }
-
-    try {
-        const target = client.commands.get(command)
-            ?? client.commands
-                .find(cmd => (cmd.aliases && cmd.aliases.includes(command)) ?? false)
-
-        // Checks if command exists. Exits when not exist.
-        // Excludes -help.
-        if (!target) {
-            return die(ctx, 'あなたは何を言っていますか?')
-        }
-
-        target.execute(ctx, args)
-    } catch (error) {
-        logger.error(error)
-        return die(ctx, 'ブッダでもどうしようもないことが起こりました。')
-    }
+    dispatchCommand(ctx)
 })
 
 client.on('messageDelete', ctx => {
-    const permission = process.env['MESSAGE_PROHIBIT']
-
-    if (!permission) {
-        return
-    }
-
-    if (!ctx.member?.roles.cache.has(permission)) {
-        return
-    }
-
-    const author = ctx.author?.tag
-    const content = ctx.content
-
-    if (ctx.author?.bot) {
-        ctx.channel.send(`${content}`)
-        return
-    }
-
-    ctx.channel.send(`${author} ${content}`)
+    preventMessageDelete(ctx)
 })
 
 client.login(TOKEN)
