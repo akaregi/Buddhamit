@@ -27,7 +27,7 @@ const command: Command = {
         const connection = await channel.join()
         const dispatcher = connection.play(createReadStream(music), { type: "ogg/opus" })
 
-        dispatcher.on('start', () => ctx.reply(`**AKKAHU AKBAR**`))
+        dispatcher.on('start', () => ctx.reply(`**ALLAHU AKBAR**`))
         dispatcher.on('finish', () => channel.leave())
         dispatcher.on('error', console.error)
     }
