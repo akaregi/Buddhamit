@@ -4,7 +4,7 @@ import { createReadStream, existsSync } from "fs"
 const command: Command = {
     name: 'fakejoin',
     description: '0～15秒間ボイスチャンネルに接続して説教します。',
-    aliases: ['fakebuddha', 'fake', 'join', 'ヤクザブッダ'],
+    aliases: ['fakebuddha', 'fake', 'ヤクザブッダ', '説教', 'フェイクブッダ'],
 
     async execute(ctx: Message, args: string[]) {
         ctx.react('👍')
