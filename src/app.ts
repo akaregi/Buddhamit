@@ -1,7 +1,8 @@
 /// <reference path="@types/discord.d.ts" />
 
-import { Client, Collection, Message } from 'discord.js'
+import { Client, Collection, Intents, Message } from 'discord.js'
 import { readdirSync } from 'fs'
+import { die } from './lib/Util'
 
 // Logger
 import { getLogger } from 'log4js'
@@ -18,7 +19,14 @@ const PREFIX = process.env['PREFIX'] || "-"
 logger.info('Booting BUDDHAMIT Bot...')
 
 // Command registration
-const client = new Client()
+const client = new Client({
+    ws: {
+        intents: new Intents([
+            Intents.NON_PRIVILEGED,
+            'GUILD_MEMBERS'
+        ])
+    }
+})
 client.commands = new Collection()
 
 const files = readdirSync('./src/commands')
@@ -119,7 +127,3 @@ client.on('messageDelete', ctx => {
 
 client.login(TOKEN)
 
-function die (ctx: Message, message: string) {
-    ctx.react('❌')
-    ctx.reply(message)
-}

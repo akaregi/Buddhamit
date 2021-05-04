@@ -1,5 +1,5 @@
 import { Command, Message, MessageEmbed, User } from "discord.js"
-import { fetchUser } from "../lib/UserUtil"
+import { die, fetchUser } from "../lib/Util"
 
 const command: Command = {
     name: 'avatar',
@@ -24,16 +24,14 @@ function selfAvatar (ctx: Message) {
 
 async function otherAvatar (ctx: Message, target: string) {
     if (!target.startsWith("<@!") || !target.endsWith(">")) {
-        ctx.reply('対象の指定はメンションに依って行われたい。')
-        return
+        return die(ctx, '対象の指定はメンションに依って行われたい。')
     }
 
     const id = target.slice(3).slice(0, -1)
     const member = await fetchUser(ctx, id)
 
     if (!member) {
-        ctx.reply('そいつはボットか輪廻転生していない。')
-        return
+        return die(ctx, 'そいつはボットか輪廻転生していない。')
     }
 
     ctx.reply(`ブッダは ${member.user.username} の真実の姿を見通しました……`)
