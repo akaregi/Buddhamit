@@ -71,6 +71,7 @@ client.on('message', async (ctx: Message) => {
                     `${command.description}\n`
         }
 
+        ctx.reply('DM に送信します……')
         ctx.react('👍');
         (await ctx.author.createDM()).send(text)
         return

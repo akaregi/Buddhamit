@@ -3,9 +3,12 @@ import { Command, Message } from "discord.js"
 const command: Command = {
     name: 'stories',
     description: '「ロボゴン」の秘められたストーリーをあなたに伝授します。',
-    execute (ctx: Message, args: string[]) {
-        ctx.react('👍')
-        ctx.reply(`
+    aliases: ['story', 'robogon', 'robo_gon'],
+
+    async execute (ctx: Message, args: string[]) {
+        ctx.reply('DM に送信します……')
+        ctx.react('👍');
+        (await ctx.author.createDM()).send(`
 ロボゴンはかつて赤城財閥の技術支援のもとかふちゃんのために製造されるはずでした。しかし、赤城財閥の心変わりにより方針転換。彼はブッダマシーンとして一生涯を遂げることになりました。
 
 その中ブッダマシーン化したロボゴンを快く思わない一派がいました。アラー派です。一派はロボゴンを財閥から接収することとし、計画は成就しました。これでロボゴンは本来のシステムに戻るはずでした。
