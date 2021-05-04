@@ -12,7 +12,7 @@ export function preventMessageDelete (ctx: Message | PartialMessage) {
         return
     }
 
-    const author = ctx.author?.tag
+    const author = ctx.author
     const content = ctx.content
 
     if (ctx.author?.bot) {
@@ -20,5 +20,13 @@ export function preventMessageDelete (ctx: Message | PartialMessage) {
         return
     }
 
-    ctx.channel.send(`${author} ${content}`)
+    const time = new Date()
+    const format =
+        `${time.getFullYear()}/${time.getMonth()}/${time.getDay()} ` +
+        `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+
+    ctx.channel.send(
+        `${author} (${author?.tag}) ${format}\n` +
+        `> ${content}`
+    )
 }
