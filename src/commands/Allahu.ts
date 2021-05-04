@@ -1,5 +1,6 @@
 import { Command, Message } from 'discord.js'
-import { createReadStream, existsSync } from 'fs'
+import { createReadStream, readdirSync } from 'fs'
+import { die } from '../lib/Util'
 
 const command: Command = {
     name: 'allahu',
@@ -18,18 +19,19 @@ const command: Command = {
             return
         }
 
-        if (!existsSync('music/allahu1.opus') && !existsSync('music/allahu2.opus')) {
-            ctx.reply('このブッダには伝統的アラーが搭載されていない。')
-            return
+        const files = readdirSync('./music')
+            .filter(file => file.startsWith('allahu') && file.endsWith('.opus'))
+
+        if (files.length === 0) {
+            return die(ctx, 'アラー音源が一つもない。')
         }
 
-        const musics = ['music/allahu1.opus', 'music/allahu2.opus']
         // NOTE: must be string
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const music = musics[Math.floor(Math.random() * musics.length)]!
+        const music = files[Math.floor(Math.random() * files.length)]!
 
         const connection = await channel.join()
-        const dispatcher = connection.play(createReadStream(music), { type: 'ogg/opus' })
+        const dispatcher = connection.play(createReadStream(`music/${music}`), { type: 'ogg/opus' })
 
         dispatcher.on('start', () => ctx.reply('**ALLAHU AKBAR**'))
         dispatcher.on('finish', () => channel.leave())
