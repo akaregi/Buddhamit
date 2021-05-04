@@ -19,7 +19,6 @@ logger.info('Booting BUDDHAMIT Bot...')
 
 // Command registration
 const client = new Client()
-const helps: Partial<Command>[] = []
 client.commands = new Collection()
 
 const files = readdirSync('./src/commands')
@@ -29,15 +28,11 @@ const files = readdirSync('./src/commands')
 for (const file of files) {
     const command = require(`./commands/${file}`)
     client.commands.set(command.name, command)
-    helps.push({
-        name: command.name,
-        description: command.description
-    })
 }
 
 // Logic
 client.on('ready', () => {
-    logger.info(`Logging in as ${client.user?.tag || 'unknown'}`)
+    logger.info(`Logging in as ${client.user?.tag ?? 'unknown'}`)
     logger.info('Booted BUDDHAMIT Bot!')
 
     client.user?.setPresence({
@@ -63,8 +58,9 @@ client.on('message', async (ctx: Message) => {
     // Help command
     if (command === 'help') {
         let text = '以下のコマンドが使えます：'
-        for (const help of helps) {
-            text += `\n\`${PREFIX}${help.name}\`\n${help.description}\n`
+        for (const cmd of client.commands) {
+            const command = cmd[1]
+            text += `\n\`${PREFIX}${command.usage ?? command.name}\`\n${command.description}\n`
         }
 
         ctx.react('👍');

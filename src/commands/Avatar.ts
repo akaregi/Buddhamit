@@ -3,7 +3,8 @@ import { fetchUser } from "../lib/UserUtil"
 
 const command: Command = {
     name: 'avatar',
-    description: 'アバターを表示します。メンションを引数として投げることでそいつのアバターを表示します。',
+    description: 'アバターを表示します。',
+    usage: 'avatar [user]',
     execute: (ctx: Message, args: string[]) => {
         if (args[0]) {
             otherAvatar(ctx, args[0])
