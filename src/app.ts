@@ -45,12 +45,13 @@ client.on('ready', () => {
 })
 
 client.on('message', async (ctx: Message) => {
+    // Neither illegal prefix nor sent by bot
     if (!ctx.content.startsWith(PREFIX) || ctx.author.bot) {
         return
     }
 
     const args = ctx.content.slice(PREFIX.length).split(/ +/)
-    const command = args.shift()?.toLowerCase();
+    const command = args.shift()!!.toLowerCase(); // NOTE: Must be string
 
     // It logs.
     logger.debug(`${ctx.author.username} ${ctx.content}`)
@@ -68,21 +69,27 @@ client.on('message', async (ctx: Message) => {
         return
     }
 
-    // Checks if command exists. Exits when not exist.
-    // Excludes -help.
-    if (!command || !client.commands.has(command)) {
-        ctx.react('❌')
-        ctx.reply(`貴方は何を言っていますか？`)
-        return
-    }
-
     try {
-        client.commands.get(command)!.execute(ctx, args)
+        const target = client.commands.get(command)
+            ?? client.commands
+                .find(cmd => (cmd.aliases && cmd.aliases.includes(command)) ?? false)
+
+        // Checks if command exists. Exits when not exist.
+        // Excludes -help.
+        if (!target) {
+            return die(ctx, 'あなたは何を言っていますか?')
+        }
+
+        target.execute(ctx, args)
     } catch (error) {
         logger.error(error)
-        ctx.react('❌')
-        ctx.reply('ブッダでもどうしようもないことが起こりました。')
+        return die(ctx, 'ブッダでもどうしようもないことが起こりました。')
     }
 })
 
 client.login(TOKEN)
+
+function die (ctx: Message, message: string) {
+    ctx.react('❌')
+    ctx.reply(message)
+}
