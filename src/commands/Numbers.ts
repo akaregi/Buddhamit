@@ -135,7 +135,7 @@ async function log (ctx: Message) {
             .addFields(
                 { name: '答え', value: `${datum.answer}`, inline: true },
                 { name: '制限時間', value: `${datum.time_limit}秒`, inline: true },
-                { name: '残り時間', value: `${datum.remaining_time / 1000}秒`, inline: true }
+                { name: '解答時間', value: `${datum.time_spent / 1000}秒`, inline: true }
             )
             .setTimestamp(datum.date)
             .setFooter('BUDDHAMIT NUMBERS™ CHALLENGE')
@@ -155,7 +155,7 @@ async function top(ctx: Message) {
         select: {
             user_name: true,
             time_limit: true,
-            remaining_time: true
+            time_spent: true
         },
         where: {
             win: true
@@ -163,9 +163,9 @@ async function top(ctx: Message) {
     })
 
     const max = data
-        .reduce((a, b) => a.time_limit - a.remaining_time > b.time_limit - b.remaining_time ? a : b)
+        .reduce((a, b) => a.time_spent < b.time_spent ? a : b)
 
-    ctx.reply(`「**${max.user_name}**」の「**${max.time_limit - (max.remaining_time / 1000)}秒**」が最速です。`)
+    ctx.reply(`「**${max.user_name}**」の「**${max.time_spent / 1000}秒**」が最速です。`)
 }
 
 async function newRecord (
@@ -175,7 +175,7 @@ async function newRecord (
     win: boolean,
     answer: number,
     timeLimit: number,
-    remaining: number
+    timeSpent: number
 ) {
     const table = ctx.client.prisma.numbers_records
 
@@ -187,7 +187,7 @@ async function newRecord (
             answer: answer,
             date: new Date(),
             time_limit: timeLimit,
-            remaining_time: remaining
+            time_spent: timeSpent
         }
     })
 }

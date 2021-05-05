@@ -14,12 +14,12 @@ model numbers_stats {
 }
 
 model numbers_records {
-    id             Int @id @default(autoincrement())
-    user_id        Int
-    user_name      String
-    answer         Int
-    win            Boolean
-    date           DateTime
-    time_limit     Int
-    remaining_time Float
+    id         Int @id @default(autoincrement())
+    user_id    Int
+    user_name  String
+    answer     Int
+    win        Boolean
+    date       DateTime
+    time_limit Int
+    time_spent Float
 }
