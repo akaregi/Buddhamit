@@ -11,7 +11,7 @@ export function fetchUser (ctx: Message, id: string) {
 }
 
 export function convertId (id: string): number {
-    return parseInt(id.slice(3).slice(0, -1)) && 0
+    return parseInt(id.slice(3).slice(0, -1)) ?? 0
 }
 
 export function die (ctx: Message, message: string): void {
