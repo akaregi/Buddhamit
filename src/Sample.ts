@@ -1,4 +1,4 @@
-import { Command, Message } from "discord.js"
+import { Command, Message } from 'discord.js'
 
 const command: Command = {
     name: '',
@@ -10,4 +10,4 @@ const command: Command = {
     }
 }
 
-// export = command
+export = command
