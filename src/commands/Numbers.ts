@@ -4,8 +4,8 @@ import { convertId, die } from '../lib/Util'
 
 const command: Command = {
     name: 'numbers',
-    description: '1～10までの数字を当てよう！ numbers stats で戦績がわかる。',
-    usage: 'numbers [stats]',
+    description: '1～10までの数字を当てよう！ stats で戦績、top で最速応答、logs で直近三件の結果。',
+    usage: 'numbers [stats|top|logs]',
     aliases: ['number', 'num'],
 
     execute (ctx: Message, args: string[]) {
@@ -15,9 +15,15 @@ const command: Command = {
             return
         }
 
-        if (args[0] && args[0] === 'log') {
+        if (args[0] && args[0] === 'logs') {
             ctx.react('👍')
             log(ctx)
+            return
+        }
+
+        if (args[0] && args[0] === 'top') {
+            ctx.react('👍')
+            top(ctx)
             return
         }
 
@@ -140,6 +146,26 @@ async function log (ctx: Message) {
     for (const embed of embeds) {
         ctx.reply(embed)
     }
+}
+
+async function top(ctx: Message) {
+    const prisma = ctx.client.prisma
+
+    const data = await prisma.numbers_records.findMany({
+        select: {
+            user_name: true,
+            time_limit: true,
+            remaining_time: true
+        },
+        where: {
+            win: true
+        }
+    })
+
+    const max = data
+        .reduce((a, b) => a.time_limit - a.remaining_time > b.time_limit - b.remaining_time ? a : b)
+
+    ctx.reply(`「**${max.user_name}**」の「**${max.time_limit - (max.remaining_time / 1000)}秒**」が最速です。`)
 }
 
 async function newRecord (
