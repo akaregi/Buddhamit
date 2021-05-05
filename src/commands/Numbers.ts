@@ -42,10 +42,10 @@ async function win (ctx: Message, answer: number, seconds: number, startTime: Da
     const id = convertId(ctx.author.id)
 
     const prisma = ctx.client.prisma
-    await prisma.numbersStats.upsert({
-        create: { id: id, win: 1 },
+    await prisma.numbers_stats.upsert({
+        create: { user_id: id, win: 1 },
         update: { win: { increment: 1 } },
-        where: { id: id }
+        where: { user_id: id }
     })
 
     ctx.react('⭕')
@@ -60,10 +60,10 @@ async function lose (ctx: Message, answer: number) {
     const id = convertId(ctx.author.id)
 
     const prisma = ctx.client.prisma
-    await prisma.numbersStats.upsert({
-        create: { id: id, lose: 1 },
+    await prisma.numbers_stats.upsert({
+        create: { user_id: id, lose: 1 },
         update: { lose: { increment: 1 } },
-        where: { id: id}
+        where: { user_id: id}
     })
 
     ctx.react('❌')
@@ -73,9 +73,9 @@ async function lose (ctx: Message, answer: number) {
 async function stats (ctx: Message) {
     const prisma = ctx.client.prisma
 
-    const data = await prisma.numbersStats.findFirst({
+    const data = await prisma.numbers_stats.findFirst({
         where: {
-            id: convertId(ctx.author.id)
+            user_id: convertId(ctx.author.id)
         }
     })
 

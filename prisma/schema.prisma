@@ -7,8 +7,17 @@ generator client {
     provider = "prisma-client-js"
 }
 
-model NumbersStats {
-    id   Int @id
-    win  Int @default(0)
-    lose Int @default(0)
+model numbers_stats {
+    user_id Int @id
+    win     Int @default(0)
+    lose    Int @default(0)
+}
+
+model numbers_records {
+    id             Int @id
+    user_id        Int
+    username       String
+    date           DateTime
+    time_limit     DateTime
+    remaining_time DateTime
 }
