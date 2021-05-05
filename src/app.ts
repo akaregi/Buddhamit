@@ -29,15 +29,18 @@ const PREFIX = process.env['PREFIX'] || '-'
 logger.info('Booting BUDDHAMIT Bot...')
 
 // Client initialization
-import { Client, Collection, Intents, Message } from 'discord.js'
-const client = new Client({
+import { Client, ClientOptions, Collection, Intents, Message } from 'discord.js'
+
+const discordOpts: ClientOptions = {
     ws: {
         intents: new Intents([
             Intents.NON_PRIVILEGED,
             'GUILD_MEMBERS'
         ])
     }
-})
+}
+
+const client = new Client(discordOpts)
 client.commands = new Collection()
 client.prefix = PREFIX
 client.logger = logger
