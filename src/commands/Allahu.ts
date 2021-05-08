@@ -4,8 +4,8 @@ import { die } from '../lib/Util'
 
 const command: Command = {
     name: 'allahu',
-    description: 'ｱｯﾗｰｱｸﾊﾞｰ！',
-    aliases: ['ヤクザアラー'],
+    description: 'ｱｯﾗｰｱｸﾊﾞｰ!',
+    aliases: ['ヤクザアラー', 'アラー'],
 
     // NOTE: args must be implemented by discord.d.ts
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
