@@ -3,13 +3,12 @@ import { Command, Message } from 'discord.js'
 const command: Command = {
     name: 'clever',
     description: 'あなたは天才です！',
-    aliases: ['クレバー'],
+    usage: 'clever [username]',
+    aliases: ['クレバー', '天才'],
 
-    // NOTE: args must be implemented by discord.d.ts
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     execute(ctx: Message, args: string[]) {
         ctx.react('👍')
-        ctx.reply(' :tada: :tada: あなたは天才です :tada: :tada:')
+        ctx.reply(` :tada: :tada: ${args[0] ?? 'あなた'}は天才です :tada: :tada:`)
     }
 }
 
