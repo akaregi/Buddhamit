@@ -1,5 +1,4 @@
-import { Collection } from 'discord.js'
-import { Command, Message, MessageEmbed } from 'discord.js'
+import { Collection, Command, Message, MessageEmbed } from 'discord.js'
 import { convertId, die } from '../lib/Util'
 
 const command: Command = {
@@ -8,7 +7,7 @@ const command: Command = {
     usage: 'numbers [stats|top|logs]',
     aliases: ['number', 'num'],
 
-    execute (ctx: Message, args: string[]) {
+    execute(ctx: Message, args: string[]) {
         if (args[0] && args[0] === 'stats') {
             ctx.react('👍')
             stats(ctx)
@@ -57,7 +56,7 @@ const command: Command = {
 
 export = command
 
-async function win (
+async function win(
     ctx: Message,
     answer: number,
     seconds: number,
@@ -81,21 +80,21 @@ async function win (
     )
 }
 
-async function lose (ctx: Message, answer: number) {
+async function lose(ctx: Message, answer: number) {
     const id = convertId(ctx.author.id)
 
     const prisma = ctx.client.prisma
     await prisma.numbers_stats.upsert({
         create: { user_id: id, lose: 1 },
         update: { lose: { increment: 1 } },
-        where: { user_id: id}
+        where: { user_id: id }
     })
 
     ctx.react('❌')
     ctx.channel.send(`あなた達は皆甲斐性がない。答えは**${answer}**であった。`)
 }
 
-async function stats (ctx: Message) {
+async function stats(ctx: Message) {
     const prisma = ctx.client.prisma
 
     const data = await prisma.numbers_stats.findFirst({
@@ -112,7 +111,7 @@ async function stats (ctx: Message) {
     ctx.reply('あなたの戦績はまだ存在しない。')
 }
 
-async function log (ctx: Message) {
+async function log(ctx: Message) {
     const prisma = ctx.client.prisma
 
     const data = await prisma.numbers_records.findMany({
@@ -168,9 +167,11 @@ async function top(ctx: Message) {
     ctx.reply(`「**${max.user_name}**」の「**${max.time_spent / 1000}秒**」が最速です。`)
 }
 
-async function newRecord (
+async function newRecord(
     ctx: Message,
+    // eslint-disable-next-line camelcase
     user_id: number,
+    // eslint-disable-next-line camelcase
     user_name: string,
     win: boolean,
     answer: number,

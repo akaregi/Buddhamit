@@ -16,7 +16,7 @@ const command: Command = {
             return
         }
 
-        const long = args[0] && args[0] === '-a' ? true : false
+        const long = args[0] && args[0] === '-a'
 
         const connection = await channel.join()
         const dispatcher = connection.play(
@@ -33,7 +33,7 @@ const command: Command = {
 
         setTimeout(() => {
             channel.leave()
-        }, seconds )
+        }, seconds)
     }
 }
 

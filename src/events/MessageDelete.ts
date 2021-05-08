@@ -1,7 +1,6 @@
-import { PartialMessage } from 'discord.js'
-import { Message } from 'discord.js'
+import { Message, PartialMessage } from 'discord.js'
 
-export function preventMessageDelete (ctx: Message | PartialMessage): void {
+export function preventMessageDelete(ctx: Message | PartialMessage): void {
     const permission = process.env['MESSAGE_PROHIBIT']
 
     if (!permission) {

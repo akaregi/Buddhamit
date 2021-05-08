@@ -24,8 +24,8 @@ const command: Command = {
             .setDescription('圧倒的破壊力と劣悪な操作性を誇る、モンスター仕様の対物スナイパーライフル。')
             .setImage(picked)
             .addFields(
-                { name: '名称', value: 'クレーバー.50スナイパー', inline: true},
-                { name: 'Name', value: 'Kraber .50-cal Sniper', inline: true}
+                { name: '名称', value: 'クレーバー.50スナイパー', inline: true },
+                { name: 'Name', value: 'Kraber .50-cal Sniper', inline: true }
             )
             .setTimestamp()
             .setFooter('Titanfall, Titanfall 2, Apex Legends')

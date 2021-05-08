@@ -1,6 +1,6 @@
 import { Client } from 'discord.js'
 
-export function ready (client: Client): void {
+export function ready(client: Client): void {
     const logger = client.logger
 
     logger.info(`Logging in as ${client.user?.tag ?? 'unknown'}`)

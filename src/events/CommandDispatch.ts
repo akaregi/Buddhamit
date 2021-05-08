@@ -1,7 +1,7 @@
 import { Message } from 'discord.js'
 import { die } from '../lib/Util'
 
-export function dispatchCommand (ctx: Message): void {
+export function dispatchCommand(ctx: Message): void {
     const client = ctx.client
     const logger = ctx.client.logger
 
