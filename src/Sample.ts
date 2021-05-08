@@ -5,7 +5,7 @@ const command: Command = {
     description: '',
     aliases: [''],
 
-    execute(ctx: Message, args: string[]) {
+    execute (ctx: Message, args: string[]) {
         if (args[0] && args[0] === 'data') {
             // Arguments processor
         }

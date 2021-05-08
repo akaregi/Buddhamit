@@ -25,10 +25,7 @@ dotenv.config()
 // Discord.js
 const client = new Client({
     ws: {
-        intents: new Intents([
-            Intents.NON_PRIVILEGED,
-            'GUILD_MEMBERS'
-        ])
+        intents: new Intents([Intents.NON_PRIVILEGED, 'GUILD_MEMBERS'])
     }
 })
 client.commands = new Collection()

@@ -24,8 +24,5 @@ export function preventMessageDelete(ctx: Message | PartialMessage): void {
         `${time.getFullYear()}/${time.getMonth()}/${time.getDay()} ` +
         `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
 
-    ctx.channel.send(
-        `${author} (${author?.tag}) ${format}\n` +
-        `> ${content}`
-    )
+    ctx.channel.send(`${author} (${author?.tag}) ${format}\n` + `> ${content}`)
 }

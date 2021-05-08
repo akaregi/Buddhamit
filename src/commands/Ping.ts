@@ -5,7 +5,7 @@ const command: Command = {
     description: '仏説摩訶般若波羅蜜多心経……',
     usage: 'ping [-v]',
 
-    execute(ctx: Message, args: string[]) {
+    execute (ctx: Message, args: string[]) {
         ctx.react('👍')
         ctx.reply('仏説摩訶般若波羅蜜多心経……')
 

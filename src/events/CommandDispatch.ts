@@ -1,7 +1,7 @@
 import { Message } from 'discord.js'
 import { die } from '../lib/Util'
 
-export function dispatchCommand(ctx: Message): void {
+export function dispatchCommand (ctx: Message): void {
     const client = ctx.client
     const logger = ctx.client.logger
 
@@ -21,8 +21,9 @@ export function dispatchCommand(ctx: Message): void {
     logger.debug(`${ctx.author.username} ${ctx.content}`)
 
     try {
-        const target = client.commands.get(command)
-            ?? client.commands
+        const target =
+            client.commands.get(command) ??
+            client.commands
                 .find(cmd => (cmd.aliases && cmd.aliases.includes(command)) ?? false)
 
         // Checks if command exists. Exits when not exist.

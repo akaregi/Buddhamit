@@ -17,12 +17,12 @@ const command: Command = {
 
 export = command
 
-function selfAvatar(ctx: Message) {
+function selfAvatar (ctx: Message) {
     ctx.reply('ブッダは貴方の真実の姿を見通しました……')
     ctx.reply(embed(ctx.author))
 }
 
-async function otherAvatar(ctx: Message, target: string) {
+async function otherAvatar (ctx: Message, target: string) {
     if (!target.startsWith('<@!') || !target.endsWith('>')) {
         return die(ctx, '対象の指定はメンションに依って行われたい。')
     }
@@ -38,7 +38,7 @@ async function otherAvatar(ctx: Message, target: string) {
     ctx.reply(embed(member.user))
 }
 
-function embed(author: User) {
+function embed (author: User) {
     return new MessageEmbed()
         .setAuthor(author.username)
         .setImage(author.displayAvatarURL({

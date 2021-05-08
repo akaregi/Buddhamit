@@ -7,7 +7,7 @@ const command: Command = {
     usage: 'manpower <role>',
     aliases: ['徴兵', '人的', 'mp'],
 
-    async execute(ctx: Message, args: string[]) {
+    async execute (ctx: Message, args: string[]) {
         if (ctx.channel.type === 'dm') {
             ctx.channel.send('あなたしかいませんよ、舎利子。')
             return
@@ -17,13 +17,12 @@ const command: Command = {
             return die(ctx, 'ロールを指定してください、舎利子よ。')
         }
 
-        const role = ctx.guild?.roles.cache
-            .find(role => {
-                const name = role.name.toLowerCase()
-                const object = args[0]?.toLowerCase()
+        const role = ctx.guild?.roles.cache.find(role => {
+            const name = role.name.toLowerCase()
+            const object = args[0]?.toLowerCase()
 
-                return !name.indexOf(object ?? '')
-            })
+            return !name.indexOf(object ?? '')
+        })
 
         if (!role) {
             ctx.client.logger.debug(args[0])
@@ -34,8 +33,7 @@ const command: Command = {
             ?.array()
             .filter(member => member.roles.cache.has(role.id))
 
-        const members = roleMembers
-            ?.filter(member => !member.voice.channel)
+        const members = roleMembers?.filter(member => !member.voice.channel)
 
         if (!members) {
             return die(ctx, '徴兵できる舎利子は存在しない。')
@@ -49,7 +47,11 @@ const command: Command = {
 
         ctx.react('👍')
         ctx.channel.send(
-            `${(new Date()).getMonth() + 1}月度勤労抽選により「${candicate}」は「**${role.name}**」のために徴兵される。`
+            `${
+                new Date().getMonth() + 1
+            }月度勤労抽選により「${candicate}」は「**${
+                role.name
+            }**」のために徴兵される。`
         )
 
         if (args[1] && args[1] === '-v') {
@@ -71,12 +73,11 @@ const command: Command = {
 
             ctx.channel.send(
                 'デバッグ情報: \n' +
-                `対象ロール \`@${role.name} (${role.id})\` \n` +
-                `ロール持ち: ${targetMembers} \n` +
-                `VC により除外: ${excludeMembers ?? 'なし'} \n` +
-                `**候補**: ${includeMembers}`
+                    `対象ロール \`@${role.name} (${role.id})\` \n` +
+                    `ロール持ち: ${targetMembers} \n` +
+                    `VC により除外: ${excludeMembers ?? 'なし'} \n` +
+                    `**候補**: ${includeMembers}`
             )
-
         }
     }
 }

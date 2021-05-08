@@ -6,7 +6,7 @@ const command: Command = {
     usage: 'value [name]',
     aliases: ['俺の価値'],
 
-    execute(ctx: Message, args: string[]) {
+    execute (ctx: Message, args: string[]) {
         const name = args[0] ? `「${args[0]}」` : 'お前'
 
         ctx.react('👍')

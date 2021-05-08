@@ -7,7 +7,7 @@ const command: Command = {
 
     // NOTE: args must be implemented by discord.d.ts
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    execute(ctx: Message, args: string[]) {
+    execute (ctx: Message, args: string[]) {
         ctx.react('👍')
 
         const images = [

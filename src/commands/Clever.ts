@@ -6,7 +6,7 @@ const command: Command = {
     usage: 'clever [username]',
     aliases: ['クレバー', '天才'],
 
-    execute(ctx: Message, args: string[]) {
+    execute (ctx: Message, args: string[]) {
         ctx.react('👍')
         ctx.reply(` :tada: :tada: ${args[0] ?? 'あなた'}は天才です :tada: :tada:`)
     }

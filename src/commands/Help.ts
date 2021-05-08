@@ -7,23 +7,25 @@ const command: Command = {
 
     // NOTE: args must be implemented by discord.d.ts
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async execute(ctx: Message, args: string[]) {
+    async execute (ctx: Message, args: string[]) {
         let text = '以下のコマンドが使えます：'
         for (const cmd of ctx.client.commands) {
             const command = cmd[1]
-            const alises = command.aliases
-                ?.map(cmd => `\`${cmd}\``)
-                .join(', ') ?? 'エイリアスなし'
+            const alises =
+                command.aliases?.map(cmd => `\`${cmd}\``).join(', ') ??
+                'エイリアスなし'
 
-            text += '\n' +
+            text +=
+                '\n' +
                 `\`${ctx.client.prefix}${command.usage ?? command.name}\`` +
                 ` (${alises})\n` +
                 `${command.description}\n`
         }
 
         ctx.reply('DM に送信します……')
-        ctx.react('👍');
-        (await ctx.author.createDM()).send(text)
+        ctx.react('👍')
+
+        ;(await ctx.author.createDM()).send(text)
     }
 }
 

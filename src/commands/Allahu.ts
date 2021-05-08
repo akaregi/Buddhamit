@@ -9,7 +9,7 @@ const command: Command = {
 
     // NOTE: args must be implemented by discord.d.ts
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async execute(ctx: Message, args: string[]) {
+    async execute (ctx: Message, args: string[]) {
         ctx.react('👍')
 
         const channel = ctx.member?.voice.channel
@@ -26,12 +26,12 @@ const command: Command = {
             return die(ctx, 'アラー音源が一つもない。')
         }
 
-        // NOTE: must be string
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const music = files[Math.floor(Math.random() * files.length)]!
 
         const connection = await channel.join()
-        const dispatcher = connection.play(createReadStream(`music/${music}`), { type: 'ogg/opus' })
+        const readStream = createReadStream(`music/${music}`)
+        const dispatcher = connection.play(readStream, { type: 'ogg/opus' })
 
         dispatcher.on('start', () => ctx.reply('**ALLAHU AKBAR**'))
         dispatcher.on('finish', () => channel.leave())

@@ -3,11 +3,12 @@ import { convertId, die } from '../lib/Util'
 
 const command: Command = {
     name: 'numbers',
-    description: '1～10までの数字を当てよう！ stats で戦績、top で最速応答、logs で直近三件の結果。',
+    description:
+        '1～10までの数字を当てよう！ stats で戦績、top で最速応答、logs で直近三件の結果。',
     usage: 'numbers [stats|top|logs]',
     aliases: ['number', 'num'],
 
-    execute(ctx: Message, args: string[]) {
+    execute (ctx: Message, args: string[]) {
         if (args[0] && args[0] === 'stats') {
             ctx.react('👍')
             stats(ctx)
@@ -34,29 +35,46 @@ const command: Command = {
 
         ctx.react('👍')
         ctx.channel.send(`ブッダの求める数値を提示せよ……${seconds}秒内に！`)
-        ctx.channel.awaitMessages(filter, { max: 1, time: seconds * 1000, errors: ['time'] })
-            .then(async answers => {
+        ctx.channel
+            .awaitMessages(filter, {
+                max: 1,
+                time: seconds * 1000,
+                errors: ['time']
+            })
+            .then(async (answers) => {
                 const endTime = new Date()
                 const remaining = endTime.getTime() - startTime.getTime()
 
                 win(ctx, answer, seconds, remaining, answers)
 
                 await newRecord(
-                    ctx, convertId(ctx.author.id), ctx.author.username, true, answer, seconds, remaining
+                    ctx,
+                    convertId(ctx.author.id),
+                    ctx.author.username,
+                    true,
+                    answer,
+                    seconds,
+                    remaining
                 )
             })
             .catch(async () => {
                 lose(ctx, answer)
                 await newRecord(
-                    ctx, convertId(ctx.author.id), ctx.author.username, false, answer, seconds, 0
+                    ctx,
+                    convertId(ctx.author.id),
+                    ctx.author.username,
+                    false,
+                    answer,
+                    seconds,
+                    0
                 )
             })
     }
 }
 
-export = command
+export = command;
 
-async function win(
+async function win (
     ctx: Message,
     answer: number,
     seconds: number,
@@ -75,12 +93,12 @@ async function win(
     ctx.react('⭕')
     ctx.channel.send(
         `:tada: :tada: ${answers.first()?.author} は天才です :tada: :tada:\n` +
-        `答えは「**${answer}**」、残り時間は「**${seconds - (remaining / 1000)}秒**」であった。` +
-        '皆の衆、よく見習うべし。'
+            `答えは「**${answer}**」、残り時間は「**${seconds - remaining / 1000}秒**」であった。` +
+            '皆の衆、よく見習うべし。'
     )
 }
 
-async function lose(ctx: Message, answer: number) {
+async function lose (ctx: Message, answer: number) {
     const id = convertId(ctx.author.id)
 
     const prisma = ctx.client.prisma
@@ -94,7 +112,7 @@ async function lose(ctx: Message, answer: number) {
     ctx.channel.send(`あなた達は皆甲斐性がない。答えは**${answer}**であった。`)
 }
 
-async function stats(ctx: Message) {
+async function stats (ctx: Message) {
     const prisma = ctx.client.prisma
 
     const data = await prisma.numbers_stats.findFirst({
@@ -104,14 +122,16 @@ async function stats(ctx: Message) {
     })
 
     if (data) {
-        ctx.reply(`あなたは「**${data.win}回**」勝利、「**${data.lose}回**」敗北。精進せよ。`)
+        ctx.reply(
+            `あなたは「**${data.win}回**」勝利、「**${data.lose}回**」敗北。精進せよ。`
+        )
         return
     }
 
     ctx.reply('あなたの戦績はまだ存在しない。')
 }
 
-async function log(ctx: Message) {
+async function log (ctx: Message) {
     const prisma = ctx.client.prisma
 
     const data = await prisma.numbers_records.findMany({
@@ -130,11 +150,21 @@ async function log(ctx: Message) {
     for (const datum of data) {
         const embed = new MessageEmbed()
             .setAuthor(datum.user_name)
-            .setTitle(`NUMBERS CHALLENGE #${datum.id}: ${datum.win ? '勝ち' : '負け'}`)
+            .setTitle(
+                `NUMBERS CHALLENGE #${datum.id}: ${datum.win ? '勝ち' : '負け'}`
+            )
             .addFields(
                 { name: '答え', value: `${datum.answer}`, inline: true },
-                { name: '制限時間', value: `${datum.time_limit}秒`, inline: true },
-                { name: '解答時間', value: `${datum.time_spent / 1000}秒`, inline: true }
+                {
+                    name: '制限時間',
+                    value: `${datum.time_limit}秒`,
+                    inline: true
+                },
+                {
+                    name: '解答時間',
+                    value: `${datum.time_spent / 1000}秒`,
+                    inline: true
+                }
             )
             .setTimestamp(datum.date)
             .setFooter('BUDDHAMIT NUMBERS™ CHALLENGE')
@@ -147,7 +177,7 @@ async function log(ctx: Message) {
     }
 }
 
-async function top(ctx: Message) {
+async function top (ctx: Message) {
     const prisma = ctx.client.prisma
 
     const data = await prisma.numbers_records.findMany({
@@ -161,13 +191,16 @@ async function top(ctx: Message) {
         }
     })
 
-    const max = data
-        .reduce((a, b) => a.time_spent < b.time_spent ? a : b)
+    const max = data.reduce((a, b) => (a.time_spent < b.time_spent ? a : b))
 
-    ctx.reply(`「**${max.user_name}**」の「**${max.time_spent / 1000}秒**」が最速です。`)
+    ctx.reply(
+        `「**${max.user_name}**」の「**${
+            max.time_spent / 1000
+        }秒**」が最速です。`
+    )
 }
 
-async function newRecord(
+async function newRecord (
     ctx: Message,
     // eslint-disable-next-line camelcase
     user_id: number,

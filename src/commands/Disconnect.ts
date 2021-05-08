@@ -7,7 +7,7 @@ const command: Command = {
 
     // NOTE: args must be implemented by discord.d.ts
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async execute(ctx: Message, args: string[]) {
+    async execute (ctx: Message, args: string[]) {
         ctx.react('👍')
 
         const channel = ctx.member?.voice.channel

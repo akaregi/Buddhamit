@@ -7,7 +7,7 @@ const command: Command = {
 
     // NOTE: args must be implemented by discord.d.ts
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async execute(ctx: Message, args: string[]) {
+    async execute (ctx: Message, args: string[]) {
         ctx.reply('DM に送信します……')
         ctx.react('👍');
         (await ctx.author.createDM()).send(`
