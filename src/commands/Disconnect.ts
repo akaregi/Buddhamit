@@ -11,7 +11,7 @@ const command: Command = {
 
         const channel = ctx.member?.voice.channel
 
-        if (channel) {
+        if (channel && channel.members.has(ctx.client.user?.id ?? '')) {
             channel.leave()
             return
         }
