@@ -3,6 +3,7 @@ import { Command, Message } from 'discord.js'
 const command: Command = {
     name: 'disconnect',
     description: 'VCから強制切断させます。',
+    aliases: ['dc', '切断'],
 
     // NOTE: args must be implemented by discord.d.ts
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
