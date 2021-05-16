@@ -7,7 +7,6 @@ import { PrismaClient } from '@prisma/client'
 import { getLogger } from 'log4js'
 
 import { Client, Collection, Intents, Message } from 'discord.js'
-import { preventMessageDelete } from './events/MessageDelete'
 import { dispatchCommand } from './events/CommandDispatch'
 import { ready } from './events/Ready'
 
@@ -56,10 +55,6 @@ client.on('error', async () => {
 
 client.on('message', async (ctx: Message) => {
     dispatchCommand(ctx)
-})
-
-client.on('messageDelete', ctx => {
-    preventMessageDelete(ctx)
 })
 
 client.login(process.env['TOKEN'] || 'aaa')
